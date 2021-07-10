@@ -6,7 +6,7 @@ import isEqual from 'react-fast-compare';
 export interface PersistProps {
   name: string;
   debounce?: number;
-  persistFilter: (data: FormikProps<{}>) => any;
+  persistFilter?: (data: FormikProps<{}>) => any;
   isSessionStorage?: boolean;
 }
 
