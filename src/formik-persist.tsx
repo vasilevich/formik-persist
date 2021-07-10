@@ -6,6 +6,7 @@ import isEqual from 'react-fast-compare';
 export interface PersistProps {
   name: string;
   debounce?: number;
+  persistFilter: (data: FormikProps<{}>) => any;
   isSessionStorage?: boolean;
 }
 
@@ -15,10 +16,11 @@ class PersistImpl extends React.Component<
 > {
   static defaultProps = {
     debounce: 300,
+    persistFilter: ({ isSubmitting, ...filteredData }: any) => filteredData,
   };
 
   saveForm = debounce((data: FormikProps<{}>) => {
-    const { isSubmitting, ...filteredData } = data;
+    const filteredData = this.props.persistFilter(data);
     if (this.props.isSessionStorage) {
       window.sessionStorage.setItem(
         this.props.name,

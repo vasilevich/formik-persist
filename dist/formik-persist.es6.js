@@ -523,7 +523,7 @@ var PersistImpl = (function (_super) {
     function PersistImpl() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.saveForm = index(function (data) {
-            var isSubmitting = data.isSubmitting, filteredData = __rest(data, ["isSubmitting"]);
+            var filteredData = _this.props.persistFilter(data);
             if (_this.props.isSessionStorage) {
                 window.sessionStorage.setItem(_this.props.name, JSON.stringify(filteredData));
             }
@@ -551,6 +551,10 @@ var PersistImpl = (function (_super) {
     };
     PersistImpl.defaultProps = {
         debounce: 300,
+        persistFilter: function (_a) {
+            var isSubmitting = _a.isSubmitting, filteredData = __rest(_a, ["isSubmitting"]);
+            return filteredData;
+        },
     };
     return PersistImpl;
 }(Component));
