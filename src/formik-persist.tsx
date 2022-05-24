@@ -26,6 +26,12 @@ const save = async (This: any, data: any) => {
         JSON.stringify(filteredData)
     );
   } else {
+    for (const key of Object.keys(filteredData)) {
+      const value = filteredData[key];
+      if (typeof value === 'function') {
+        delete filteredData[key];
+      }
+    }
     return localforage.setItem(
         This.props.name,
         filteredData

@@ -3392,12 +3392,12 @@ module.exports = localforage_js;
 
 var _this = undefined;
 var save = function (This, data) { return __awaiter(_this, void 0, void 0, function () {
-    var filteredData;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var filteredData, _i, _a, key, value;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0: return [4, This.props.persistFilter(data)];
             case 1:
-                filteredData = _a.sent();
+                filteredData = _b.sent();
                 if (This.props.isSessionStorage === true) {
                     return [2, window.sessionStorage.setItem(This.props.name, JSON.stringify(filteredData))];
                 }
@@ -3405,6 +3405,13 @@ var save = function (This, data) { return __awaiter(_this, void 0, void 0, funct
                     return [2, window.localStorage.setItem(This.props.name, JSON.stringify(filteredData))];
                 }
                 else {
+                    for (_i = 0, _a = Object.keys(filteredData); _i < _a.length; _i++) {
+                        key = _a[_i];
+                        value = filteredData[key];
+                        if (typeof value === 'function') {
+                            delete filteredData[key];
+                        }
+                    }
                     return [2, localforage.setItem(This.props.name, filteredData)];
                 }
                 return [2];
