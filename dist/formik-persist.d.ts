@@ -5,7 +5,9 @@ export interface PersistProps {
     debounce?: number;
     persistFilter?: (data: FormikProps<any>) => Promise<any>;
     loadFilter?: (data: any) => Promise<FormikProps<any>>;
+    localForageConfig?: any;
     isSessionStorage?: boolean;
+    isLocalStorage?: boolean;
 }
 export declare const Persist: React.ComponentClass<PersistProps, React.ComponentState> & {
     WrappedComponent: React.ComponentClass<PersistProps & {
