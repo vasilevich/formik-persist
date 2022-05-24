@@ -3,8 +3,8 @@ import { FormikProps } from 'formik';
 export interface PersistProps {
     name: string;
     debounce?: number;
-    persistFilter?: (data: FormikProps<any>) => any;
-    loadFilter?: (data: any) => FormikProps<any>;
+    persistFilter?: (data: FormikProps<any>) => Promise<any>;
+    loadFilter?: (data: any) => Promise<FormikProps<any>>;
     isSessionStorage?: boolean;
 }
 export declare const Persist: React.ComponentClass<PersistProps, React.ComponentState> & {

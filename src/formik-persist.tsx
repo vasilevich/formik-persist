@@ -6,11 +6,37 @@ import isEqual from 'react-fast-compare';
 export interface PersistProps {
   name: string;
   debounce?: number;
-  persistFilter?: (data: FormikProps<any>) => any;
-  loadFilter?: (data: any) => FormikProps<any>;
+  persistFilter?: (data: FormikProps<any>) => Promise<any>;
+  loadFilter?: (data: any) => Promise<FormikProps<any>>;
 
   isSessionStorage?: boolean;
 }
+
+const save = async (This: any, data: any) => {
+  const filteredData = await (This.props as any).persistFilter(data);
+  if (This.props.isSessionStorage) {
+    return window.sessionStorage.setItem(
+        This.props.name,
+        JSON.stringify(filteredData)
+    );
+  } else {
+    return window.localStorage.setItem(
+        This.props.name,
+        JSON.stringify(filteredData)
+    );
+  }
+};
+
+const load = async (This: any) => {
+  const maybeState = This.props.isSessionStorage
+      ? window.sessionStorage.getItem(This.props.name)
+      : window.localStorage.getItem(This.props.name);
+  if (maybeState && maybeState !== null) {
+    return This.props.formik.setFormikState(
+        await (This.props as any).loadFilter(JSON.parse(maybeState))
+    );
+  }
+};
 
 class PersistImpl extends React.Component<
   PersistProps & { formik: FormikProps<any> },
@@ -22,19 +48,8 @@ class PersistImpl extends React.Component<
     loadFilter: (loadedData: any) => loadedData,
   };
 
-  saveForm = debounce((data: FormikProps<{}>) => {
-    const filteredData = (this.props as any).persistFilter(data);
-    if (this.props.isSessionStorage) {
-      window.sessionStorage.setItem(
-        this.props.name,
-        JSON.stringify(filteredData)
-      );
-    } else {
-      window.localStorage.setItem(
-        this.props.name,
-        JSON.stringify(filteredData)
-      );
-    }
+  saveForm = debounce((data: FormikProps<any>) => {
+      save(this, data);
   }, this.props.debounce);
 
   componentDidUpdate(prevProps: PersistProps & { formik: FormikProps<any> }) {
@@ -44,12 +59,7 @@ class PersistImpl extends React.Component<
   }
 
   componentDidMount() {
-    const maybeState = this.props.isSessionStorage
-      ? window.sessionStorage.getItem(this.props.name)
-      : window.localStorage.getItem(this.props.name);
-    if (maybeState && maybeState !== null) {
-      this.props.formik.setFormikState((this.props as any).loadFilter(JSON.parse(maybeState)));
-    }
+    load(this);
   }
 
   render() {

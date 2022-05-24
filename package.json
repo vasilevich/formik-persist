@@ -1,7 +1,7 @@
 {
   "name": "formik-persist",
   "description": "Persist and rehydrate a Formik form",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "MIT",
   "author": "Jared Palmer <jared@palmer.net>",
   "repository": "jaredpalmer/formik-persist",
@@ -34,6 +34,7 @@
     "gen-docs": "all-contributors generate && doctoc README.md"
   },
   "dependencies": {
+    "localforage": "^1.10.0",
     "lodash.debounce": "^4.0.8",
     "react-fast-compare": "^2.0.1"
   },
